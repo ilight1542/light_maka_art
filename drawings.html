@@ -3,26 +3,266 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Drawings - Photo Gallery</title>
+    <title>Drawings — Gallery Wall</title>
     <style>
-        body { font-family: Arial, sans-serif; padding: 1rem; }
-        .back-link { margin-bottom: 1rem; display: inline-block; text-decoration: none; color: #0066cc; }
-        .gallery { display: flex; flex-wrap: wrap; }
-        .gallery img { margin: 5px; width: auto; max-height: 300px; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body { 
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; 
+            background-color: #121214; 
+            color: #f0f0f2; 
+            padding: 2rem 1.5rem; 
+        }
+        
+        header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 2.5rem; 
+            border-bottom: 1px solid #27272a; 
+            padding-bottom: 1rem; 
+        }
+
+        .back-link { 
+            text-decoration: none; 
+            color: #a1a1aa; 
+            font-size: 0.95rem;
+            transition: color 0.2s; 
+        }
+        
+        .back-link:hover { color: #ffffff; }
+
+        h1 {
+            font-weight: 300;
+            letter-spacing: 0.05em;
+        }
+
+        /* --- Gallery Wall (Masonry Layout) --- */
+        .gallery-wall {
+            column-count: 3;
+            column-gap: 1.5rem;
+        }
+
+        @media (max-width: 900px) { .gallery-wall { column-count: 2; } }
+        @media (max-width: 550px) { .gallery-wall { column-count: 1; } }
+
+        .gallery-item {
+            break-inside: avoid;
+            margin-bottom: 1.5rem;
+            position: relative;
+            cursor: pointer;
+            border-radius: 4px;
+            overflow: hidden;
+            background: #18181b;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .gallery-item .item-title {
+            padding: 0.75rem 1rem;
+            font-size: 0.85rem;
+            color: #a1a1aa;
+            text-align: center;
+            background: #18181b;
+        }
+
+        /* --- Fullscreen Slideshow Modal --- */
+        .slideshow-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.92);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .slideshow-modal.active {
+            display: flex;
+        }
+
+        .slideshow-content {
+            position: relative;
+            max-width: 85vw;
+            max-height: 80vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .slideshow-image {
+            max-width: 85vw;
+            max-height: 80vh;
+            object-fit: contain;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
+        }
+
+        .caption {
+            margin-top: 1.25rem;
+            color: #d4d4d8;
+            font-size: 0.95rem;
+            letter-spacing: 0.03em;
+            text-align: center;
+        }
+
+        /* Navigation Controls */
+        .modal-btn {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            border: none;
+            font-size: 1.75rem;
+            padding: 0.75rem 1.25rem;
+            cursor: pointer;
+            border-radius: 4px;
+            user-select: none;
+            transition: background 0.2s;
+        }
+
+        .modal-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .close-btn { 
+            top: 20px; 
+            right: 25px; 
+            font-size: 2rem; 
+            background: none; 
+            padding: 0.25rem 0.75rem;
+        }
+        .close-btn:hover { background: none; color: #ef4444; }
+
+        .prev-btn { left: 20px; top: 50%; transform: translateY(-50%); }
+        .next-btn { right: 20px; top: 50%; transform: translateY(-50%); }
     </style>
 </head>
 <body>
-    <a href="index.html" class="back-link">&larr; Back to Home</a>
-    <h1>Drawings</h1>
-    <div class="gallery">
-        <img src="ink_drawings/armut_after_kollwitz.png" alt="armut_after_kollwitz">
-        <img src="ink_drawings/embrace.png" alt="embrace">
-        <img src="ink_drawings/fire1.png" alt="fire1">
-        <img src="ink_drawings/fire2.png" alt="fire2">
-        <img src="ink_drawings/fire3.png" alt="fire3">
-        <img src="ink_drawings/view_after_uncle_tims_bridge.png" alt="view_after_uncle_tims_bridge">
-        <img src="ink_drawings/view_after_uncle_tims_bridge_2.png" alt="view_after_uncle_tims_bridge_2">
-        <img src="ink_drawings/view_of_providence_from_the_fishbowl_in_list.png" alt="view_of_providence_from_the_fishbowl_in_list">
+
+    <header>
+        <a href="index.html" class="back-link">&larr; Back to Portfolio</a>
+        <h1>Drawings</h1>
+        <div style="width: 100px;"></div> <!-- Visual centering spacer -->
+    </header>
+
+    <!-- Gallery Wall -->
+    <div class="gallery-wall">
+        <div class="gallery-item" onclick="openSlideshow(0)">
+            <img src="ink_drawings/armut_after_kollwitz.png" alt="Armut after Kollwitz">
+            <div class="item-title">Armut after Kollwitz</div>
+        </div>
+        <div class="gallery-item" onclick="openSlideshow(1)">
+            <img src="ink_drawings/embrace.png" alt="Embrace">
+            <div class="item-title">Embrace</div>
+        </div>
+        <div class="gallery-item" onclick="openSlideshow(2)">
+            <img src="ink_drawings/fire1.png" alt="Fire 1">
+            <div class="item-title">Fire 1</div>
+        </div>
+        <div class="gallery-item" onclick="openSlideshow(3)">
+            <img src="ink_drawings/fire2.png" alt="Fire 2">
+            <div class="item-title">Fire 2</div>
+        </div>
+        <div class="gallery-item" onclick="openSlideshow(4)">
+            <img src="ink_drawings/fire3.png" alt="Fire 3">
+            <div class="item-title">Fire 3</div>
+        </div>
+        <div class="gallery-item" onclick="openSlideshow(5)">
+            <img src="ink_drawings/view_after_uncle_tims_bridge.png" alt="View after Uncle Tim's Bridge">
+            <div class="item-title">View after Uncle Tim's Bridge</div>
+        </div>
+        <div class="gallery-item" onclick="openSlideshow(6)">
+            <img src="ink_drawings/view_after_uncle_tims_bridge_2.png" alt="View after Uncle Tim's Bridge 2">
+            <div class="item-title">View after Uncle Tim's Bridge 2</div>
+        </div>
+        <div class="gallery-item" onclick="openSlideshow(7)">
+            <img src="ink_drawings/view_of_providence_from_the_fishbowl_in_list.png" alt="View of Providence from the Fishbowl in List">
+            <div class="item-title">View of Providence from the Fishbowl in List</div>
+        </div>
     </div>
+
+    <!-- Slideshow Modal -->
+    <div id="slideshowModal" class="slideshow-modal" onclick="closeOnOuterClick(event)">
+        <button class="modal-btn close-btn" onclick="closeSlideshow()">&times;</button>
+        <button class="modal-btn prev-btn" onclick="changeSlide(-1)">&#10094;</button>
+        
+        <div class="slideshow-content">
+            <img id="slideshowImg" class="slideshow-image" src="" alt="">
+        </div>
+        <div id="slideshowCaption" class="caption"></div>
+
+        <button class="modal-btn next-btn" onclick="changeSlide(1)">&#10095;</button>
+    </div>
+
+    <script>
+        // Automatically extract image metadata from gallery items
+        const galleryItems = document.querySelectorAll('.gallery-item');
+        const images = Array.from(galleryItems).map(item => {
+            const img = item.querySelector('img');
+            return {
+                src: img.src,
+                title: img.alt
+            };
+        });
+
+        let currentIndex = 0;
+
+        function openSlideshow(index) {
+            currentIndex = index;
+            updateSlideshow();
+            document.getElementById('slideshowModal').classList.add('active');
+            document.addEventListener('keydown', handleKeyPress);
+        }
+
+        function closeSlideshow() {
+            document.getElementById('slideshowModal').classList.remove('active');
+            document.removeEventListener('keydown', handleKeyPress);
+        }
+
+        function changeSlide(direction) {
+            currentIndex += direction;
+            if (currentIndex < 0) {
+                currentIndex = images.length - 1;
+            } else if (currentIndex >= images.length) {
+                currentIndex = 0;
+            }
+            updateSlideshow();
+        }
+
+        function updateSlideshow() {
+            const slideshowImg = document.getElementById('slideshowImg');
+            const slideshowCaption = document.getElementById('slideshowCaption');
+            
+            slideshowImg.src = images[currentIndex].src;
+            slideshowImg.alt = images[currentIndex].title;
+            slideshowCaption.textContent = `${currentIndex + 1} / ${images.length} — ${images[currentIndex].title}`;
+        }
+
+        function handleKeyPress(e) {
+            if (e.key === 'Escape') closeSlideshow();
+            if (e.key === 'ArrowLeft') changeSlide(-1);
+            if (e.key === 'ArrowRight') changeSlide(1);
+        }
+
+        function closeOnOuterClick(e) {
+            if (e.target.id === 'slideshowModal') {
+                closeSlideshow();
+            }
+        }
+    </script>
 </body>
 </html>
