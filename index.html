@@ -3,26 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Photo Gallery</title>
+    <title>Artist Portfolio</title>
     <style>
-        body { font-family: Arial, sans-serif; }
-        .gallery { display: flex; flex-wrap: wrap; }
-        .gallery img { margin: 5px; width: auto; height: auto; }
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 2rem auto; padding: 0 1rem; }
+        .contact-info { margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid #ccc; }
+        .nav-links { display: flex; gap: 1.5rem; list-style: none; padding: 0; }
+        .nav-links a { text-decoration: none; color: #0066cc; font-weight: bold; font-size: 1.2rem; }
+        .nav-links a:hover { text-decoration: underline; }
     </style>
 </head>
 <body>
-    <h1>Photo Gallery</h1>
-    <div class="gallery">
-        <!-- Add your images here -->
-        <img src="ink_drawings/armut_after_kollwitz.png" alt="armut_after_kollwitz">
-        <img src="ink_drawings/embrace.png" alt="embrace">
-        <img src="ink_drawings/fire1.png" alt="fire1">
-        <img src="ink_drawings/fire2.png" alt="fire2">
-        <img src="ink_drawings/fire3.png" alt="fire3">
-        <img src="ink_drawings/view_after_uncle_tims_bridge.png" alt="view_after_uncle_tims_bridge">
-        <img src="ink_drawings/view_after_uncle_tims_bridge_2.png" alt="view_after_uncle_tims_bridge_2">
-        <img src="ink_drawings/view_of_providence_from_the_fishbowl_in_list.png" alt="view_of_providence_from_the_fishbowl_in_list">
-        <!-- Repeat for more photos -->
-    </div>
+    <h1>Artist Portfolio</h1>
+
+    <!-- Contact Information -->
+    <section class="contact-info">
+        <h2>Contact</h2>
+        <p>Email: <a href="mailto:lightmakaart@gmail.com">lightmakaart@gmail.com</a></p>
+        <p>Instagram: <a href="https://instagram.com/light.maka.art" target="_blank">@light.maka.art</a></p>
+        <p>Location: Berlin, Wellfleet</p>
+    </section>
+
+    <!-- Navigation Links to Sub-pages -->
+    <nav>
+        <ul class="nav-links">
+            <li><a href="drawings.html">Drawings</a></li>
+            <li><a href="paintings.html">Paintings</a></li>
+        </ul>
+    </nav>
 </body>
 </html>
