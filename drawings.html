@@ -162,35 +162,35 @@
     <!-- Gallery Wall -->
     <div class="gallery-wall">
         <div class="gallery-item" onclick="openSlideshow(0)">
-            <img src="ink_drawings/armut_after_kollwitz.png" alt="Armut after Kollwitz">
+            <img src="ink_drawings/thumbs/armut_after_kollwitz.jpg" data-full="ink_drawings/full/armut_after_kollwitz.jpg" alt="Armut after Kollwitz">
             <div class="item-title">Armut after Kollwitz</div>
         </div>
         <div class="gallery-item" onclick="openSlideshow(1)">
-            <img src="ink_drawings/embrace.png" alt="Embrace">
+            <img src="ink_drawings/thumbs/embrace.jpg" data-full="ink_drawings/full/embrace.jpg" alt="Embrace">
             <div class="item-title">Embrace</div>
         </div>
         <div class="gallery-item" onclick="openSlideshow(2)">
-            <img src="ink_drawings/fire1.png" alt="Fire 1">
+            <img src="ink_drawings/thumbs/fire1.jpg" data-full="ink_drawings/full/fire1.jpg" alt="Fire 1">
             <div class="item-title">Fire 1</div>
         </div>
         <div class="gallery-item" onclick="openSlideshow(3)">
-            <img src="ink_drawings/fire2.png" alt="Fire 2">
+            <img src="ink_drawings/thumbs/fire2.jpg" data-full="ink_drawings/full/fire2.jpg" alt="Fire 2">
             <div class="item-title">Fire 2</div>
         </div>
         <div class="gallery-item" onclick="openSlideshow(4)">
-            <img src="ink_drawings/fire3.png" alt="Fire 3">
+            <img src="ink_drawings/thumbs/fire3.jpg" data-full="ink_drawings/full/fire3.jpg" alt="Fire 3">
             <div class="item-title">Fire 3</div>
         </div>
         <div class="gallery-item" onclick="openSlideshow(5)">
-            <img src="ink_drawings/view_after_uncle_tims_bridge.png" alt="View after Uncle Tim's Bridge">
+            <img src="ink_drawings/thumbs/view_after_uncle_tims_bridge.jpg" data-full="ink_drawings/full/view_after_uncle_tims_bridge.jpg" alt="View after Uncle Tim's Bridge">
             <div class="item-title">View after Uncle Tim's Bridge</div>
         </div>
         <div class="gallery-item" onclick="openSlideshow(6)">
-            <img src="ink_drawings/view_after_uncle_tims_bridge_2.png" alt="View after Uncle Tim's Bridge 2">
+            <img src="ink_drawings/thumbs/view_after_uncle_tims_bridge_2.jpg" data-full="ink_drawings/full/view_after_uncle_tims_bridge_2.jpg" alt="View after Uncle Tim's Bridge 2">
             <div class="item-title">View after Uncle Tim's Bridge 2</div>
         </div>
         <div class="gallery-item" onclick="openSlideshow(7)">
-            <img src="ink_drawings/view_of_providence_from_the_fishbowl_in_list.png" alt="View of Providence from the Fishbowl in List">
+            <img src="ink_drawings/thumbs/view_of_providence_from_the_fishbowl_in_list.jpg" data-full="ink_drawings/full/view_of_providence_from_the_fishbowl_in_list.jpg" alt="View of Providence from the Fishbowl in List">
             <div class="item-title">View of Providence from the Fishbowl in List</div>
         </div>
     </div>
@@ -214,7 +214,7 @@
         const images = Array.from(galleryItems).map(item => {
             const img = item.querySelector('img');
             return {
-                src: img.src,
+                full: img.dataset.full || img.src,
                 title: img.alt
             };
         });
@@ -247,7 +247,7 @@
             const slideshowImg = document.getElementById('slideshowImg');
             const slideshowCaption = document.getElementById('slideshowCaption');
             
-            slideshowImg.src = images[currentIndex].src;
+            slideshowImg.src = images[currentIndex].full;
             slideshowImg.alt = images[currentIndex].title;
             slideshowCaption.textContent = `${currentIndex + 1} / ${images.length} — ${images[currentIndex].title}`;
         }
