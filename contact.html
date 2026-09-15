@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: "Playfair Display", Georgia, serif;
+            background-color: #121214;
+            color: #f0f0f2;
+            max-width: 700px;
+            margin: 3rem auto;
+            padding: 0 1rem 2rem;
+            line-height: 1.6;
+        }
+
+        h1 {
+            margin-bottom: 1rem;
+            font-weight: 300;
+            letter-spacing: 0.05em;
+        }
+
+        form {
+            display: grid;
+            gap: 1rem;
+        }
+
+        label {
+            font-weight: 600;
+        }
+
+        input, textarea, button {
+            font: inherit;
+            width: 100%;
+            padding: 0.85rem 0.9rem;
+            box-sizing: border-box;
+            border: 1px solid #3f3f46;
+            background: #18181b;
+            color: #f0f0f2;
+        }
+
+        textarea {
+            min-height: 160px;
+            resize: vertical;
+        }
+
+        button {
+            background: #111;
+            color: white;
+            border: 1px solid #3f3f46;
+            cursor: pointer;
+            transition: opacity 0.2s ease;
+            letter-spacing: 0.04em;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        .gdpr {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            font-size: 0.9rem;
+            color: #d4d4d8;
+        }
+
+        .gdpr input {
+            width: auto;
+            margin-top: 0.2rem;
+            accent-color: #f0f0f2;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 1.5rem;
+            color: #a1a1aa;
+            text-decoration: none;
+        }
+
+        .back-link:hover {
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="back-link">&larr; Back to home</a>
+    <h1>Contact</h1>
+
+    <form action="https://api.web3forms.com/submit" method="POST">
+        <input type="hidden" name="access_key" value="6701bef3-bb84-4c04-9369-693c3551a00b">
+
+        <div>
+            <label for="name">Name</label><br>
+            <input type="text" id="name" name="name" required>
+        </div>
+
+        <div>
+            <label for="email">Email</label><br>
+            <input type="email" id="email" name="email" required>
+        </div>
+
+        <div>
+            <label for="message">Message</label><br>
+            <textarea id="message" name="message" required></textarea>
+        </div>
+
+        <p style="font-size: 0.8rem; line-height: 1.5; max-width: 32rem; color: #555; margin-top: 0.75rem;">
+            GDPR notice: the data entered in the form will be kept for 12 months before being permanently deleted. My email address is used solely for the purpose of responding to your inquiry and will not be shared with any third parties. You have the right to request access to your data, request corrections, or request deletion at any time by contacting me directly.
+        </p>
+
+
+        <button type="submit">Submit Form</button>
+    </form>
+</body>
+</html>
