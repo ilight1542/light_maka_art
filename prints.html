@@ -79,6 +79,10 @@
             background: #18181b;
         }
 
+        .work-year {
+            display: block;
+        }
+
         .slideshow-modal {
             display: none;
             position: fixed;
@@ -119,6 +123,30 @@
             font-size: 0.95rem;
             letter-spacing: 0.03em;
             text-align: center;
+            white-space: pre-line;
+        }
+
+        .metadata {
+            position: absolute;
+            bottom: 1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            width: max-content;
+            max-width: 90%;
+            margin: 0;
+            padding: 0.5rem 0.75rem;
+            background: rgba(0, 0, 0, 0.7);
+            color: #a1a1aa;
+            font-size: 0.8rem;
+            text-align: center;
+            white-space: pre-line;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease;
+        }
+
+        .slideshow-image:hover + .metadata {
+            opacity: 1;
         }
 
         .modal-btn {
@@ -161,28 +189,28 @@
 
     <div class="gallery-wall">
         <div class="gallery-item" onclick="openSlideshow(0)">
-            <img src="prints/thumbs/at_a_loss_2026.jpg" data-full="prints/full/at_a_loss_2026.jpg" alt="At a Loss, 2026">
-            <div class="item-title">At a Loss, 2026</div>
+            <img src="prints/thumbs/at_a_loss_2026.jpg" data-full="prints/full/at_a_loss_2026.jpg" alt="At a Loss">
+            <div class="item-title">At a Loss<span class="work-year">2026</span></div>
         </div>
         <div class="gallery-item" onclick="openSlideshow(1)">
-            <img src="prints/thumbs/paar_2026.jpg" data-full="prints/full/paar_2026.jpg" alt="Paar, 2026">
-            <div class="item-title">Paar, 2026</div>
+            <img src="prints/thumbs/paar_2026.jpg" data-full="prints/full/paar_2026.jpg" alt="Paar">
+            <div class="item-title">Paar<span class="work-year">2026</span></div>
         </div>
         <div class="gallery-item" onclick="openSlideshow(2)">
-            <img src="prints/thumbs/refusal_2026.jpg" data-full="prints/full/refusal_2026.jpg" alt="Refusal, 2026">
-            <div class="item-title">Refusal, 2026</div>
+            <img src="prints/thumbs/refusal_2026.jpg" data-full="prints/full/refusal_2026.jpg" alt="Refusal">
+            <div class="item-title">Refusal<span class="work-year">2026</span></div>
         </div>
         <div class="gallery-item" onclick="openSlideshow(3)">
-            <img src="prints/thumbs/striving_2026.jpg" data-full="prints/full/striving_2026.jpg" alt="Striving, 2026">
-            <div class="item-title">Striving, 2026</div>
+            <img src="prints/thumbs/striving_2026.jpg" data-full="prints/full/striving_2026.jpg" alt="Striving">
+            <div class="item-title">Striving<span class="work-year">2026</span></div>
         </div>
         <div class="gallery-item" onclick="openSlideshow(4)">
-            <img src="prints/thumbs/the_conversation_2026.jpg" data-full="prints/full/the_conversation_2026.jpg" alt="The Conversation, 2026">
-            <div class="item-title">The Conversation, 2026</div>
+            <img src="prints/thumbs/the_conversation_2026.jpg" data-full="prints/full/the_conversation_2026.jpg" alt="The Conversation">
+            <div class="item-title">The Conversation<span class="work-year">2026</span></div>
         </div>
         <div class="gallery-item" onclick="openSlideshow(5)">
-            <img src="prints/thumbs/the_knights_2026.jpg" data-full="prints/full/the_knights_2026.jpg" alt="The Knights, 2026">
-            <div class="item-title">The Knights, 2026</div>
+            <img src="prints/thumbs/the_knights_2026.jpg" data-full="prints/full/the_knights_2026.jpg" alt="The Knights">
+            <div class="item-title">The Knights<span class="work-year">2026</span></div>
         </div>
     </div>
 
@@ -192,12 +220,14 @@
 
         <div class="slideshow-content">
             <img id="slideshowImg" class="slideshow-image" src="" alt="">
+            <div id="slideshowMetadata" class="metadata"></div>
         </div>
         <div id="slideshowCaption" class="caption"></div>
 
         <button class="modal-btn next-btn" onclick="changeSlide(1)">&#10095;</button>
     </div>
 
+    <script src="metadata.js"></script>
     <script>
         const galleryItems = document.querySelectorAll('.gallery-item');
         const images = Array.from(galleryItems).map(item => {
@@ -209,6 +239,12 @@
         });
 
         let currentIndex = 0;
+        let artworkMetadata = new Map();
+
+        loadArtworkMetadata().then(metadata => {
+            artworkMetadata = metadata;
+            updateSlideshow();
+        }).catch(error => console.error(error));
 
         function openSlideshow(index) {
             currentIndex = index;
@@ -235,10 +271,13 @@
         function updateSlideshow() {
             const slideshowImg = document.getElementById('slideshowImg');
             const slideshowCaption = document.getElementById('slideshowCaption');
+            const slideshowMetadata = document.getElementById('slideshowMetadata');
+            const metadata = metadataForImage(artworkMetadata, images[currentIndex].full);
 
             slideshowImg.src = images[currentIndex].full;
             slideshowImg.alt = images[currentIndex].title;
-            slideshowCaption.textContent = images[currentIndex].title;
+            slideshowCaption.textContent = `${metadata.name}${metadata.date !== "Unknown" ? `\n${metadata.date}` : ""}`;
+            slideshowMetadata.textContent = `${metadata.dimensions}\n${metadata.technique}`;
         }
 
         function closeOnOuterClick(event) {

@@ -119,6 +119,30 @@
             font-size: 0.95rem;
             letter-spacing: 0.03em;
             text-align: center;
+            white-space: pre-line;
+        }
+
+        .metadata {
+            position: absolute;
+            bottom: 1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            width: max-content;
+            max-width: 90%;
+            margin: 0;
+            padding: 0.5rem 0.75rem;
+            background: rgba(0, 0, 0, 0.7);
+            color: #a1a1aa;
+            font-size: 0.8rem;
+            text-align: center;
+            white-space: pre-line;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease;
+        }
+
+        .slideshow-image:hover + .metadata {
+            opacity: 1;
         }
 
         .modal-btn {
@@ -176,12 +200,14 @@
 
         <div class="slideshow-content">
             <img id="slideshowImg" class="slideshow-image" src="" alt="">
+            <div id="slideshowMetadata" class="metadata"></div>
         </div>
         <div id="slideshowCaption" class="caption"></div>
 
         <button class="modal-btn next-btn" onclick="changeSlide(1)">&#10095;</button>
     </div>
 
+    <script src="metadata.js"></script>
     <script>
         const galleryItems = document.querySelectorAll('.gallery-item');
         const images = Array.from(galleryItems).map(item => {
@@ -193,6 +219,12 @@
         });
 
         let currentIndex = 0;
+        let artworkMetadata = new Map();
+
+        loadArtworkMetadata().then(metadata => {
+            artworkMetadata = metadata;
+            updateSlideshow();
+        }).catch(error => console.error(error));
 
         function openSlideshow(index) {
             currentIndex = index;
@@ -219,10 +251,13 @@
         function updateSlideshow() {
             const slideshowImg = document.getElementById('slideshowImg');
             const slideshowCaption = document.getElementById('slideshowCaption');
+            const slideshowMetadata = document.getElementById('slideshowMetadata');
+            const metadata = metadataForImage(artworkMetadata, images[currentIndex].full);
 
             slideshowImg.src = images[currentIndex].full;
             slideshowImg.alt = images[currentIndex].title;
-            slideshowCaption.textContent = `${currentIndex + 1} / ${images.length} — ${images[currentIndex].title}`;
+            slideshowCaption.textContent = `${metadata.name}${metadata.date !== "Unknown" ? `\n${metadata.date}` : ""}`;
+            slideshowMetadata.textContent = `${metadata.dimensions}\n${metadata.technique}`;
         }
 
         function handleKeyPress(e) {
